@@ -1,9 +1,8 @@
 package com.github.jonatabecker.prc.gui;
 
+import com.github.jonatabecker.prc.philosopher.Table;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import javax.swing.JComponent;
-import javax.swing.JPanel;
 
 /**
  * Philosopher container
@@ -12,11 +11,17 @@ import javax.swing.JPanel;
  */
 public class PhilosopherConteiner extends JComponent {
 
+    /** Table */
+    private final Table table;
+    
     /**
      * Creates a new philosopher container
+     * 
+     * @param table
      */
-    public PhilosopherConteiner() {
+    public PhilosopherConteiner(Table table) {
         super();
+        this.table = table;
         initGui();
     }
 
@@ -29,6 +34,6 @@ public class PhilosopherConteiner extends JComponent {
     }
     
     private JComponent build() {
-        return new TableComponent();
+        return new TableComponent(table);
     } 
 }
