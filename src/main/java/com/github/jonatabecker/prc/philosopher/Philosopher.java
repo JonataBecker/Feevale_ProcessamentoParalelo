@@ -11,9 +11,9 @@ import java.util.Random;
 public class Philosopher extends Model<Philosopher> {
     
     /** Processing time */
-    private static final int TIME = 2000;
+    private static final int TIME = 5000;
     /** Waiting time */
-    private static final int TIME_WAINTING = 200;
+    private static final int TIME_WAINTING = 100;
 
     /** The key */
     private final int key;
