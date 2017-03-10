@@ -77,6 +77,7 @@ public class BarberQueue extends Model<BarberClient> {
                 run();
             }
         });
+        thread.setDaemon(true);
         thread.start();
     }
 

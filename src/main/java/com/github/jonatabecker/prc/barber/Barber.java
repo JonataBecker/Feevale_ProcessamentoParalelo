@@ -12,7 +12,7 @@ public class Barber extends Model<BarberEvent> {
     /** Time waiting */
     private static final int TIME = 5000;
     /** Time processing */
-    private static final int TIME_PROCESSING = 200;
+    private static final int TIME_PROCESSING = 800;
 
     /** Queue */
     private final BarberQueue barberQueue;
@@ -90,6 +90,7 @@ public class Barber extends Model<BarberEvent> {
                 run();
             }
         });
+        thread.setDaemon(true);
         thread.start();
     }
 
