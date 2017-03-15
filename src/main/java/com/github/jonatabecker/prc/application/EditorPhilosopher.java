@@ -1,6 +1,6 @@
 package com.github.jonatabecker.prc.application;
 
-import com.github.jonatabecker.prc.gui.ConfigurationComponent;
+import com.github.jonatabecker.prc.gui.PhilosopherConfigurationComponent;
 import com.github.jonatabecker.prc.gui.PhilosopherConteiner;
 import com.github.jonatabecker.prc.gui.LoggerComponent;
 import com.github.jonatabecker.prc.philosopher.Table;
@@ -15,8 +15,7 @@ import javax.swing.JComponent;
 public class EditorPhilosopher extends JComponent {
 
     private final Table table;
-
-    private ConfigurationComponent configuration;
+    private PhilosopherConfigurationComponent configuration;
     
     /**
      * Creates a new philosopher editor
@@ -62,7 +61,7 @@ public class EditorPhilosopher extends JComponent {
      * @return JComponent
      */
     private JComponent buildConfiguration() {
-        configuration = new ConfigurationComponent();
+        configuration = new PhilosopherConfigurationComponent();
         return configuration;
     }
 
@@ -72,7 +71,7 @@ public class EditorPhilosopher extends JComponent {
      * @return JComponent
      */
     private JComponent buildLogger() {
-        return new LoggerComponent();
+        return new LoggerComponent(Logger.philosopher());
     }
 
 }

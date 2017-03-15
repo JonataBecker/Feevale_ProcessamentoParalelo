@@ -1,7 +1,6 @@
 package com.github.jonatabecker.prc.gui;
 
 import com.github.jonatabecker.prc.barber.BarberQueue;
-import java.awt.Color;
 import java.awt.FlowLayout;
 import javax.swing.JPanel;
 
@@ -39,7 +38,7 @@ public class QueueComponent extends JPanel {
      * Builds clients
      */
     private void builds() {
-        for (int i = BarberQueue.MAX - 1; i >=0; i--) {
+        for (int i = barberQueue.getSize() - 1; i >=0; i--) {
             buildChair(i);
         }
     }

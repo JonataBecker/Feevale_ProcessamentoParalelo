@@ -13,6 +13,8 @@ public class Philosopher extends Model<Philosopher> {
 
     /** Waiting time */
     private static final int TIME_WAINTING = 5;
+    /** Waiting time after processing */
+    private static final int TIME_WAINTING_PROCESSING = 15;
 
     /** The key */
     private final int key;
@@ -121,12 +123,13 @@ public class Philosopher extends Model<Philosopher> {
      * @throws InterruptedException
      */
     private void run() throws InterruptedException {
+        int time = TIME_WAINTING;
         try {
             getForkLeft().get(this);
             getForkRight().get(this);
             modifyState(PhilosopherState.PROCESSING);
-            Logger.append(String.format("[%s] Starvation :%s", getKey(), getStarvation()));
-            Logger.append(String.format("[%s] Processando", getKey()));
+            Logger.philosopher().append(String.format("[%s] Starvation :%s", getKey(), getStarvation()));
+            Logger.philosopher().append(String.format("[%s] Processando", getKey()));
             int p = processing;
             while (true) {
                 int t = (1000 / 32);
@@ -136,22 +139,23 @@ public class Philosopher extends Model<Philosopher> {
                 }
                 p -= t;
                 if (p <= 0) {
-                    return;
+                    break;
                 }
             }
+            time = TIME_WAINTING_PROCESSING;
         } catch (ForkUsesException e) {
             getForkLeft().free(this);
             getForkRight().free(this);
         } finally {
             modifyState(PhilosopherState.WAINTING);
         }
-        starvation -= TIME_WAINTING;
+        starvation -= time;
         if (starvation <= 0) {
-            Logger.append(String.format("[%s] Morto", getKey()));
+            Logger.philosopher().append(String.format("[%s] Morto", getKey()));
             modifyState(PhilosopherState.DEAD);
             throw new InterruptedException();
         }
-        Thread.sleep(TIME_WAINTING);
+        Thread.sleep(time);
     }
 
     /**

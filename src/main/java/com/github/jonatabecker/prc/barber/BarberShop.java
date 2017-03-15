@@ -22,10 +22,15 @@ public class BarberShop {
 
     /**
      * Initializes the process
+     *
+     * @param size
+     * @param processing
+     * @param sleeping
+     * @param queue
      */
-    public void init() {
-        barberQueue.init();
-        barber.init();
+    public void init(int size, int processing, int sleeping, int queue) {
+        barberQueue.init(queue, size);
+        barber.init(sleeping, processing);
     }
 
     /**

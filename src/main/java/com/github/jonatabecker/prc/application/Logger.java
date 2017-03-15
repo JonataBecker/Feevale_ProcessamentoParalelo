@@ -9,17 +9,33 @@ import java.util.List;
  */
 public class Logger {
 
-    private static final List<EventListener<String>> EVENTS = new ArrayList<>();
+    private static Logger philosopher;
+    private static Logger barber;
 
+    private final List<EventListener<String>> events = new ArrayList<>();
 
-    public static void append(String text) {
-        EVENTS.forEach((e) -> {
+    public void append(String text) {
+        events.forEach((e) -> {
             e.observed(text);
         });
     }
-    
-    public static void addEvent(EventListener<String> evet) {
-        EVENTS.add(evet);
+
+    public void addEvent(EventListener<String> evet) {
+        events.add(evet);
+    }
+
+    public static Logger barber() {
+        if (barber == null) {
+            barber = new Logger();
+        }
+        return barber;
+    }
+
+    public static Logger philosopher() {
+        if (philosopher == null) {
+            philosopher = new Logger();
+        }
+        return philosopher;
     }
 
 }

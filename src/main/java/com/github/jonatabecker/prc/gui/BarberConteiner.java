@@ -16,12 +16,13 @@ public class BarberConteiner extends JComponent {
     
     /**
      * Creates a new barber container
+     * 
+     * @param barberShop
      */
-    public BarberConteiner() {
+    public BarberConteiner(BarberShop barberShop) {
         super();
-        this.barberShop = new BarberShop();
+        this.barberShop = barberShop;
         initGui();
-        barberShop.init();
     }
 
     /**

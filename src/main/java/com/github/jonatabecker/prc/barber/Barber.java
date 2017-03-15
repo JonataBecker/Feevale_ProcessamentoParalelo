@@ -1,5 +1,6 @@
 package com.github.jonatabecker.prc.barber;
 
+import com.github.jonatabecker.prc.application.Logger;
 import com.github.jonatabecker.prc.mvc.Model;
 
 /**
@@ -9,13 +10,12 @@ import com.github.jonatabecker.prc.mvc.Model;
  */
 public class Barber extends Model<BarberEvent> {
 
-    /** Time waiting */
-    private static final int TIME = 5000;
-    /** Time processing */
-    private static final int TIME_PROCESSING = 800;
-
     /** Queue */
     private final BarberQueue barberQueue;
+    /** Time sleep */
+    private int sleep;
+    /** Time processing */
+    private int processing;
     /** State */
     private BarberState state;
     /** Thread */
@@ -41,7 +41,7 @@ public class Barber extends Model<BarberEvent> {
         this.state = state;
         fireEvents(new BarberEvent(client, this));
     }
-    
+
     /**
      * Modify the state
      *
@@ -54,21 +54,20 @@ public class Barber extends Model<BarberEvent> {
     /**
      * Run
      */
-    private void run() {
+    private void run() throws InterruptedException {
+        Logger.barber().append("Dormindo");
+        Thread.sleep(sleep);
         try {
-            Thread.sleep(TIME);
-            try {
-                while (true) {
-                    BarberClient client = barberQueue.get();
-                    modifyState(BarberState.PROCESSING, client);
-                    client.processing();
-                    Thread.sleep(TIME_PROCESSING);
-                    client.done();
-                }
-            } catch (QueueEmpty e) {
-                modifyState(BarberState.WAINTING);
+            while (true) {
+                BarberClient client = barberQueue.get();
+                Logger.barber().append("Processando cliente " + client.getKey());
+                modifyState(BarberState.PROCESSING, client);
+                client.processing();
+                Thread.sleep(processing);
+                client.done();
             }
-        } catch (InterruptedException e) {
+        } catch (QueueEmpty e) {
+            modifyState(BarberState.WAINTING);
         }
     }
 
@@ -83,17 +82,27 @@ public class Barber extends Model<BarberEvent> {
 
     /**
      * Initializes the process
+     *
+     * @param sleep
+     * @param processing
      */
-    public void init() {
+    public void init(int sleep, int processing) {
+        this.sleep = sleep;
+        this.processing = processing;
+        if (thread != null) {
+            thread.interrupt();
+        }
         thread = new Thread(() -> {
             while (true) {
-                run();
+                try {
+                    run();
+                } catch (InterruptedException e) {
+                    break;
+                }
             }
         });
         thread.setDaemon(true);
         thread.start();
     }
-
-    
 
 }

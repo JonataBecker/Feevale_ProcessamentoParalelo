@@ -12,23 +12,23 @@ import java.util.List;
  */
 public class BarberQueue extends Model<BarberClient> {
 
-    /** Time */
-    private static final int TIME = 1000;
-    /** Max */
-    public static final int MAX = 5;
-
     /** Queue */
     private final LinkedList<BarberClient> queue;
     /** Thread */
     private Thread thread;
+    /** Time */
+    private int time;
+    /** Size */
+    private int size;
     /** Client counter */
     private int clientCounter;
-
+    
     /**
      * Creates a new barber queue
      */
     public BarberQueue() {
         this.queue = new LinkedList<>();
+        this.size = 5;
     }
 
     /**
@@ -43,16 +43,13 @@ public class BarberQueue extends Model<BarberClient> {
     /**
      * Run
      */
-    private void run() {
-        try {
-            if (queue.size() < MAX) {
-                BarberClient client = buildClient();
-                queue.add(client);
-                fireEvents(client);
-            }
-            Thread.sleep(TIME);
-        } catch (InterruptedException e) {
+    private void run() throws InterruptedException {
+        if (queue.size() < size) {
+            BarberClient client = buildClient();
+            queue.add(client);
+            fireEvents(client);
         }
+        Thread.sleep(time);
     }
 
     /**
@@ -70,11 +67,24 @@ public class BarberQueue extends Model<BarberClient> {
 
     /**
      * Initialize the process
+     * 
+     * @param time
+     * @param size
      */
-    public void init() {
+    public void init(int time, int size) {
+        this.time = time;
+        this.size = size;        
+        queue.clear();
+        if (thread != null) {
+            thread.interrupt();
+        }
         thread = new Thread(() -> {
             while (true) {
-                run();
+                try {
+                    run();
+                } catch (InterruptedException e) {
+                    break;
+                }
             }
         });
         thread.setDaemon(true);
@@ -89,10 +99,10 @@ public class BarberQueue extends Model<BarberClient> {
     public List<BarberClient> getClients() {
         return Collections.unmodifiableList(queue);
     }
-    
+
     /**
      * Returns the barber client
-     * 
+     *
      * @param pos
      * @return BarberClient
      */
@@ -103,4 +113,12 @@ public class BarberQueue extends Model<BarberClient> {
         return queue.get(pos);
     }
 
+    /**
+     * Returns the queue size
+     * 
+     * @return int
+     */
+    public int getSize() {
+        return size;
+    }
 }

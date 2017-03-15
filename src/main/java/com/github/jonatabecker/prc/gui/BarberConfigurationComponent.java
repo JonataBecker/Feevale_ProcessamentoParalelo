@@ -17,30 +17,34 @@ import javax.swing.JTextField;
  *
  * @author JonataBecker
  */
-public class ConfigurationComponent extends JComponent {
+public class BarberConfigurationComponent extends JComponent {
 
     /** Default size */
     private static final int SIZE = 5;
     /** Default time processing */
-    private static final int PROCESSING = 5000;
-    /** Default time life */
-    private static final int STARVATION = 15000;
+    private static final int PROCESSING = 800;
+    /** Default time sleeping */
+    private static final int SLEEPING = 5000;
+    /** Default time queue */
+    private static final int QUEUE = 1000;
     
     /** Event */
     private final List<EventListener<Bean>> events;
     /** Size */
     private JTextField size;
     /** Time processing */
-    private JTextField timeProcessing;
-    /** Starvation */
-    private JTextField starvation;
+    private JTextField processing;
+    /** Sleeping */
+    private JTextField sleeping;
+    /** Queue */
+    private JTextField queue;
     /** Button */
     private JButton button;
     
     /**
      * Creates a new configuration component
      */
-    public ConfigurationComponent() {
+    public BarberConfigurationComponent() {
         super();
         this.events = new ArrayList<>();
         initGui();
@@ -63,9 +67,10 @@ public class ConfigurationComponent extends JComponent {
         button.addActionListener((event) -> {
             events.forEach((e) -> {
                 int si = Integer.valueOf(this.size.getText());
-                int ti = Integer.valueOf(this.timeProcessing.getText());
-                int st = Integer.valueOf(this.starvation.getText());
-                e.observed(new Bean(si, ti, st));
+                int ti = Integer.valueOf(this.processing.getText());
+                int sl = Integer.valueOf(this.sleeping.getText());
+                int qu = Integer.valueOf(this.queue.getText());
+                e.observed(new Bean(si, ti, sl, qu));
             });
         });
     }
@@ -78,12 +83,14 @@ public class ConfigurationComponent extends JComponent {
     private JComponent buildForm() {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(0, 1));
-        panel.add(new JLabel("Filosofos:"));
+        panel.add(new JLabel("Tamanho fila:"));
         panel.add(buildSize());
+        panel.add(new JLabel("Tempo fila:"));
+        panel.add(buildQueue());
         panel.add(new JLabel("Processamento:"));
         panel.add(buildProcessing());
-        panel.add(new JLabel("Starvation:"));
-        panel.add(buildStarvation());
+        panel.add(new JLabel("Espera:"));
+        panel.add(buildSleep());
         panel.add(buildButton());
         return panel;
     }
@@ -96,7 +103,19 @@ public class ConfigurationComponent extends JComponent {
     private JComponent buildSize() {
         size = new JTextField();
         size.setText(String.valueOf(SIZE));
+        size.setEditable(false);
         return size;
+    }
+    
+    /**
+     * Builds the queue field
+     *
+     * @return JComponennt
+     */
+    private JComponent buildQueue() {
+        queue = new JTextField();
+        queue.setText(String.valueOf(QUEUE));
+        return queue;
     }
 
     /**
@@ -105,20 +124,20 @@ public class ConfigurationComponent extends JComponent {
      * @return JComponennt
      */
     private JComponent buildProcessing() {
-        timeProcessing = new JTextField();
-        timeProcessing.setText(String.valueOf(PROCESSING));
-        return timeProcessing;
+        processing = new JTextField();
+        processing.setText(String.valueOf(PROCESSING));
+        return processing;
     }
 
     /**
-     * Builds the starvation
+     * Builds the sleeping
      *
      * @return JComponennt
      */
-    private JComponent buildStarvation() {
-        starvation = new JTextField();
-        starvation.setText(String.valueOf(STARVATION));
-        return starvation;
+    private JComponent buildSleep() {
+        sleeping = new JTextField();
+        sleeping.setText(String.valueOf(SLEEPING));
+        return sleeping;
     }
 
     /**
@@ -148,21 +167,25 @@ public class ConfigurationComponent extends JComponent {
         /** Size */
         private final int size;
         /** Time processing */
-        private final int timeProcessing;
-        /** Starvation */
-        private final int starvation;
+        private final int processing;
+        /** Sleeping */
+        private final int sleeping;
+        /** Queue */
+        private final int queue;
 
         /**
          * Creates a new configuration information
          *
          * @param size
-         * @param timeProcessing
-         * @param timeWainting
+         * @param processing
+         * @param sleeping
+         * @param queue
          */
-        public Bean(int size, int timeProcessing, int timeWainting) {
+        public Bean(int size, int processing, int sleeping, int queue) {
             this.size = size;
-            this.timeProcessing = timeProcessing;
-            this.starvation = timeWainting;
+            this.processing = processing;
+            this.sleeping = sleeping;
+            this.queue = queue;
         }
 
         /**
@@ -179,17 +202,26 @@ public class ConfigurationComponent extends JComponent {
          *
          * @return int
          */
-        public int getTimeProcessing() {
-            return timeProcessing;
+        public int getProcessing() {
+            return processing;
         }
 
         /**
-         * Returns the starvation
+         * Returns the sleeping time
          *
          * @return int
          */
-        public int getStarvation() {
-            return starvation;
+        public int getSleeping() {
+            return sleeping;
+        }
+
+        /**
+         * Returns the queue time
+         *
+         * @return int
+         */
+        public int getQueue() {
+            return queue;
         }
 
     }

@@ -15,10 +15,12 @@ import javax.swing.text.DefaultCaret;
  */
 public class LoggerComponent extends JComponent {
 
+    private final Logger logger;
     private JTextArea textArea;
     
-    public LoggerComponent() {
+    public LoggerComponent(Logger logger) {
         super();
+        this.logger = logger;
         initGui();
         initEvents();
     }
@@ -35,7 +37,7 @@ public class LoggerComponent extends JComponent {
     }
 
     private void initEvents() {
-        Logger.addEvent((e) -> {
+        logger.addEvent((e) -> {
             textArea.append(e + "\n");
         });
     }
