@@ -2,7 +2,6 @@ package com.github.jonatabecker.prc.philosopher;
 
 import com.github.jonatabecker.prc.mvc.Model;
 import com.github.jonatabecker.prc.application.Logger;
-import java.util.Random;
 
 /**
  * Philosopher information
@@ -14,7 +13,7 @@ public class Philosopher extends Model<Philosopher> {
     /** Waiting time */
     private static final int TIME_WAINTING = 5;
     /** Waiting time after processing */
-    private static final int TIME_WAINTING_PROCESSING = 0;
+    private static final int TIME_WAINTING_PROCESSING = 10;
 
     /** The key */
     private final int key;
@@ -125,7 +124,7 @@ public class Philosopher extends Model<Philosopher> {
             while (true) {
                 int t = (int) Math.ceil(1000 / 32);
                 if (starvation < maxStarvation) {
-                    starvation += t;
+                    starvation += t * 5;
                 }
                 Thread.sleep(t);
                 p -= t;
@@ -133,7 +132,7 @@ public class Philosopher extends Model<Philosopher> {
                     break;
                 }
             }
-            time = TIME_WAINTING_PROCESSING;
+            time = (int) (Math.random() * TIME_WAINTING_PROCESSING);
         } catch (ForkUsesException e) {
             getForkLeft().free(this);
             getForkRight().free(this);

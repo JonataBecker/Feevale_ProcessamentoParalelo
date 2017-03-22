@@ -4,6 +4,8 @@ import com.github.jonatabecker.prc.mvc.Model;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Barber queue
@@ -22,7 +24,7 @@ public class BarberQueue extends Model<BarberClient> {
     private int size;
     /** Client counter */
     private int clientCounter;
-    
+
     /**
      * Creates a new barber queue
      */
@@ -43,13 +45,12 @@ public class BarberQueue extends Model<BarberClient> {
     /**
      * Run
      */
-    private void run() throws InterruptedException {
+    private synchronized void run() {
         if (queue.size() < size) {
             BarberClient client = buildClient();
             queue.add(client);
             fireEvents(client);
         }
-        Thread.sleep(time);
     }
 
     /**
@@ -58,7 +59,7 @@ public class BarberQueue extends Model<BarberClient> {
      * @return BarberClient
      * @throws QueueEmpty
      */
-    public BarberClient get() throws QueueEmpty {
+    public synchronized BarberClient get() throws QueueEmpty {
         if (queue.isEmpty()) {
             throw new QueueEmpty();
         }
@@ -69,13 +70,13 @@ public class BarberQueue extends Model<BarberClient> {
 
     /**
      * Initialize the process
-     * 
+     *
      * @param time
      * @param size
      */
     public void init(int time, int size) {
         this.time = time;
-        this.size = size;        
+        this.size = size;
         queue.clear();
         if (thread != null) {
             thread.interrupt();
@@ -84,6 +85,7 @@ public class BarberQueue extends Model<BarberClient> {
             while (true) {
                 try {
                     run();
+                    Thread.sleep(time);
                 } catch (InterruptedException e) {
                     break;
                 }
@@ -117,7 +119,7 @@ public class BarberQueue extends Model<BarberClient> {
 
     /**
      * Returns the queue size
-     * 
+     *
      * @return int
      */
     public int getSize() {
