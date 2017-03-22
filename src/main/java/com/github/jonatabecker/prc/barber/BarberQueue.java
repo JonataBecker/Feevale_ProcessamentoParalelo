@@ -62,7 +62,9 @@ public class BarberQueue extends Model<BarberClient> {
         if (queue.isEmpty()) {
             throw new QueueEmpty();
         }
-        return queue.pop();
+        BarberClient client = queue.pop();
+        fireEvents(client);
+        return client;
     }
 
     /**

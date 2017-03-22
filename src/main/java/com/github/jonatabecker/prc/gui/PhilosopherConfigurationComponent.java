@@ -22,9 +22,9 @@ public class PhilosopherConfigurationComponent extends JComponent {
     /** Default size */
     private static final int SIZE = 5;
     /** Default time processing */
-    private static final int PROCESSING = 2000;
+    private static final int PROCESSING = 1800;
     /** Default time life */
-    private static final int STARVATION = 15000;
+    private static final int STARVATION = 30000;
     
     /** Event */
     private final List<EventListener<Bean>> events;

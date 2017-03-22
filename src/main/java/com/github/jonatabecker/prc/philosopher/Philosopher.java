@@ -14,7 +14,7 @@ public class Philosopher extends Model<Philosopher> {
     /** Waiting time */
     private static final int TIME_WAINTING = 5;
     /** Waiting time after processing */
-    private static final int TIME_WAINTING_PROCESSING = 15;
+    private static final int TIME_WAINTING_PROCESSING = 0;
 
     /** The key */
     private final int key;
@@ -109,15 +109,6 @@ public class Philosopher extends Model<Philosopher> {
     }
 
     /**
-     * Execute the initial sleep
-     *
-     * @throws InterruptedException
-     */
-    private void initSleep() throws InterruptedException {
-        Thread.sleep((int) (new Random().nextDouble() * 100));
-    }
-
-    /**
      * Run
      *
      * @throws InterruptedException
@@ -132,11 +123,11 @@ public class Philosopher extends Model<Philosopher> {
             Logger.philosopher().append(String.format("[%s] Processando", getKey()));
             int p = processing;
             while (true) {
-                int t = (1000 / 32);
-                Thread.sleep(t);
+                int t = (int) Math.ceil(1000 / 32);
                 if (starvation < maxStarvation) {
                     starvation += t;
                 }
+                Thread.sleep(t);
                 p -= t;
                 if (p <= 0) {
                     break;
@@ -155,7 +146,17 @@ public class Philosopher extends Model<Philosopher> {
             modifyState(PhilosopherState.DEAD);
             throw new InterruptedException();
         }
+        thread.setPriority(calcPriority());
         Thread.sleep(time);
+    }
+    
+    /**
+     * Calculates the process priority
+     * 
+     * @return int
+     */
+    private int calcPriority() {
+        return (((starvation - maxStarvation) * -1) * 10 / maxStarvation) + 1;
     }
 
     /**
@@ -164,7 +165,6 @@ public class Philosopher extends Model<Philosopher> {
     public void init() {
         thread = new Thread(() -> {
             try {
-                initSleep();
                 while (true) {
                     run();
                 }
