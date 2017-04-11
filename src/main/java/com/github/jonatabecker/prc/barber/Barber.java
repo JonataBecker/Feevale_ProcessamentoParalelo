@@ -28,7 +28,7 @@ public class Barber extends Model<BarberEvent> {
      */
     public Barber(BarberQueue barberQueue) {
         this.barberQueue = barberQueue;
-        this.state = BarberState.WAINTING;
+        this.state = BarberState.WAITING;
     }
 
     /**
@@ -67,7 +67,7 @@ public class Barber extends Model<BarberEvent> {
                 client.done();
             }
         } catch (QueueEmpty e) {
-            modifyState(BarberState.WAINTING);
+            modifyState(BarberState.WAITING);
         }
     }
 

@@ -11,9 +11,9 @@ import com.github.jonatabecker.prc.application.Logger;
 public class Philosopher extends Model<Philosopher> {
 
     /** Waiting time */
-    private static final int TIME_WAINTING = 5;
+    private static final int TIME_WAITING = 5;
     /** Waiting time after processing */
-    private static final int TIME_WAINTING_PROCESSING = 10;
+    private static final int TIME_WAITING_PROCESSING = 10;
 
     /** The key */
     private final int key;
@@ -47,7 +47,7 @@ public class Philosopher extends Model<Philosopher> {
         this.processing = processing;
         this.forkLeft = forkLeft;
         this.forkRight = forkRight;
-        this.state = PhilosopherState.WAINTING;
+        this.state = PhilosopherState.WAITING;
         this.maxStarvation = starvation;
         this.starvation = starvation;
     }
@@ -113,7 +113,7 @@ public class Philosopher extends Model<Philosopher> {
      * @throws InterruptedException
      */
     private void run() throws InterruptedException {
-        int time = TIME_WAINTING;
+        int time = TIME_WAITING;
         try {
             getForkLeft().get(this);
             getForkRight().get(this);
@@ -132,12 +132,12 @@ public class Philosopher extends Model<Philosopher> {
                     break;
                 }
             }
-            time = (int) (Math.random() * TIME_WAINTING_PROCESSING);
+            time = (int) (Math.random() * TIME_WAITING_PROCESSING);
         } catch (ForkUsesException e) {
             getForkLeft().free(this);
             getForkRight().free(this);
         } finally {
-            modifyState(PhilosopherState.WAINTING);
+            modifyState(PhilosopherState.WAITING);
         }
         starvation -= time;
         if (starvation <= 0) {

@@ -21,7 +21,7 @@ public class BarberClient extends Model<BarberClient>{
      */
     public BarberClient(int key) {
         this.key = key;
-        this.state = ClientState.WAINTING;
+        this.state = ClientState.WAITING;
     }
     
     /**

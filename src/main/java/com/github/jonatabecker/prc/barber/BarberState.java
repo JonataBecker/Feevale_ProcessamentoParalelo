@@ -7,7 +7,7 @@ package com.github.jonatabecker.prc.barber;
  */
 public enum BarberState {
 
-    WAINTING,
+    WAITING,
     PROCESSING
 
 }

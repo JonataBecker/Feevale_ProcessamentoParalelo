@@ -7,7 +7,7 @@ package com.github.jonatabecker.prc.philosopher;
  */
 public enum PhilosopherState {
 
-    WAINTING,
+    WAITING,
     PROCESSING,
     DEAD
 

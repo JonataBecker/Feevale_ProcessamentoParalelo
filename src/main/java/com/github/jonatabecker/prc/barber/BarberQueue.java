@@ -4,8 +4,6 @@ import com.github.jonatabecker.prc.mvc.Model;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Barber queue

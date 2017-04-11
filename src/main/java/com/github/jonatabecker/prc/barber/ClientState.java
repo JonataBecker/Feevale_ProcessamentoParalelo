@@ -7,7 +7,7 @@ package com.github.jonatabecker.prc.barber;
  */
 public enum ClientState {
 
-    WAINTING,
+    WAITING,
     PROCESSING,
     DONE;
 

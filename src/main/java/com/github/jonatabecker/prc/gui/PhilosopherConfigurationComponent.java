@@ -157,12 +157,12 @@ public class PhilosopherConfigurationComponent extends JComponent {
          *
          * @param size
          * @param timeProcessing
-         * @param timeWainting
+         * @param timeWaiting
          */
-        public Bean(int size, int timeProcessing, int timeWainting) {
+        public Bean(int size, int timeProcessing, int timeWaiting) {
             this.size = size;
             this.timeProcessing = timeProcessing;
-            this.starvation = timeWainting;
+            this.starvation = timeWaiting;
         }
 
         /**
